@@ -83,5 +83,10 @@ public:
 	UFUNCTION(Server, Reliable)
 	void Server_Fire();
 
+protected:
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category= "AI")
+	UPawnNoiseEmitterComponent* PawnNoiseEmitterComp;
+
 };
 

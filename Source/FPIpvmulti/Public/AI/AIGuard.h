@@ -19,6 +19,8 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	virtual void PostInitializeComponents() override;
+
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -32,5 +34,8 @@ protected:
 
 	UFUNCTION()
 	void OnPawnSeen(APawn* Pawn);
+
+	UFUNCTION()
+	void OnNoiseHeard(APawn* HearInstigator, const FVector& Location, float Volume);
 	
 };
