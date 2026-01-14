@@ -42,7 +42,9 @@ void UFPIpvmultiWeaponComponent::Fire()
 			//Set Spawn Collision Handling Override
 			FActorSpawnParameters ActorSpawnParams;
 			ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
-	
+			
+			ActorSpawnParams.Instigator = Character;
+			
 			// Spawn the projectile at the muzzle
 			World->SpawnActor<AFPIpvmultiProjectile>(ProjectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
 		}

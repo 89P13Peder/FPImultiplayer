@@ -38,4 +38,10 @@ protected:
 	UFUNCTION()
 	void OnNoiseHeard(APawn* HearInstigator, const FVector& Location, float Volume);
 	
+	FRotator OriginalRotator;
+	
+	UFUNCTION()
+	void ResetOrientation();
+	
+	FTimerHandle TimerHandle_ResetOrientation;
 };

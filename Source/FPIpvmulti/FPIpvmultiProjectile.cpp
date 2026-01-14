@@ -37,7 +37,8 @@ void AFPIpvmultiProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherAct
 	if ((OtherActor != nullptr) && (OtherActor != this) && (OtherComp != nullptr) && OtherComp->IsSimulatingPhysics())
 	{
 		OtherComp->AddImpulseAtLocation(GetVelocity() * 100.0f, GetActorLocation());
-
-		Destroy();
+		
 	}
+	MakeNoise(1.0f, GetInstigator());
+	Destroy();
 }
