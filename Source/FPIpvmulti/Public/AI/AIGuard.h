@@ -6,6 +6,15 @@
 #include "GameFramework/Character.h"
 #include "AIGuard.generated.h"
 class UPawnSensingComponent;
+
+UENUM(BlueprintType)
+enum class EIAState : uint8
+{
+	Idle, 
+	Suspicious,
+	Alarted
+};
+
 UCLASS()
 class FPIPVMULTI_API AAIGuard : public ACharacter
 {
@@ -14,6 +23,8 @@ class FPIPVMULTI_API AAIGuard : public ACharacter
 public:
 	// Sets default values for this character's properties
 	AAIGuard();
+	
+	void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
 
 protected:
 	// Called when the game starts or when spawned
@@ -29,6 +40,7 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 protected:
+	// SENSINGS
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UPawnSensingComponent* PawnSensingComp;
 
@@ -44,4 +56,18 @@ protected:
 	void ResetOrientation();
 	
 	FTimerHandle TimerHandle_ResetOrientation;
+	
+	// GUARD STATE:
+	
+	UPROPERTY(ReplicatedUsing=OnRep_GuardState)
+	EIAState GuardState;
+	
+	UFUNCTION()
+	void OnRep_GuardState();
+	
+	void SetGuardState(EIAState NewState);
+	
+	UFUNCTION(BlueprintImplementableEvent, Category = "IA Guard")
+	void OnStateChanged(EIAState NewState);
+	
 };

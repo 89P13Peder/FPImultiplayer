@@ -2,6 +2,8 @@
 
 
 #include "FPIpvmulti/Public/AI/AIGuard.h"
+
+#include "Net/UnrealNetwork.h"
 #include "Perception/PawnSensingComponent.h"
 
 // Sets default values
@@ -10,6 +12,14 @@ AAIGuard::AAIGuard()
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	PawnSensingComp = CreateDefaultSubobject<UPawnSensingComponent>("PawnSensingComp");
+	
+	GuardState = EIAState::Idle;
+}
+
+void AAIGuard::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(AAIGuard, GuardState);
 }
 
 // Called when the game starts or when spawned
@@ -50,6 +60,7 @@ void AAIGuard::OnPawnSeen(APawn* SeenPawn)
 																	false,
 																	6.0f);
 	
+	SetGuardState(EIAState::Alarted);
 }
 
 void AAIGuard::OnNoiseHeard(APawn* HearInstigator, const FVector& Location, float Volume)
@@ -68,12 +79,30 @@ void AAIGuard::OnNoiseHeard(APawn* HearInstigator, const FVector& Location, floa
 
 	GetWorldTimerManager().ClearTimer(TimerHandle_ResetOrientation);
 	GetWorldTimerManager().SetTimer(TimerHandle_ResetOrientation, this, &ThisClass:: ResetOrientation, 3.0f);
+	
+	SetGuardState(EIAState::Suspicious);
 }
 
 void AAIGuard::ResetOrientation()
 {
+	if (GuardState == EIAState::Alarted) return;
+	
 	SetActorRotation(OriginalRotator);
+	SetGuardState(EIAState::Idle);
 }
+
+void AAIGuard::SetGuardState(EIAState NewState)
+{
+	if (GuardState == NewState) return;
+	GuardState = NewState;
+	OnStateChanged(GuardState);
+}
+
+void AAIGuard::OnRep_GuardState()
+{
+	OnStateChanged(GuardState);
+}
+
 
 
 
