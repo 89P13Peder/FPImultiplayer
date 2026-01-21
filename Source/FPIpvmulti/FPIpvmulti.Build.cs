@@ -13,6 +13,10 @@ public class FPIpvmulti : ModuleRules
                                                             "Engine", 
                                                             "InputCore", 
                                                             "EnhancedInput",
-															"AIModule"});
+															"AIModule",
+															"UMG",
+															"Slate",
+															"SlateCore",
+		});
 	}
 }

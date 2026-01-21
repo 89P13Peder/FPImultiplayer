@@ -31,17 +31,15 @@ void AAWinTrigger::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* O
 {
 	if (!HasAuthority()) return;
 
-	AFPIpvmultiCharacter* Player =
-		Cast<AFPIpvmultiCharacter>(OtherActor);
-
-	if (!Player) return;
+	ACharacter* Char = Cast<ACharacter>(OtherActor);
+	if (!Char) return;
 
 	AFPIpvmultiGameMode* GM =
 		GetWorld()->GetAuthGameMode<AFPIpvmultiGameMode>();
 
 	if (GM)
 	{
-		GM->PlayerWon(Player);
+		GM->PlayerEnteredWinZone(Char);
 	}
 }
 

@@ -28,7 +28,6 @@ void AAIGuard::BeginPlay()
 	Super::BeginPlay();
 	
 	OriginalRotator = GetActorRotation();
-	
 }
 
 void AAIGuard::PostInitializeComponents()

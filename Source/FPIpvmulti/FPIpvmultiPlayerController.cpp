@@ -1,24 +1,36 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "FPIpvmultiPlayerController.h"
+#include "Blueprint/UserWidget.h"
+#include "FPIpvmultiGameState.h"
 
-void AFPIpvmultiPlayerController::Client_ShowWinMessage_Implementation()
+void AFPIpvmultiPlayerController::BeginPlay()
 {
-	if (!IsLocalController()) return;
+	Super::BeginPlay();
+	
+	if (!IsLocalController())
+		return;
 
-	GEngine->AddOnScreenDebugMessage(
-		-1, 5.f, FColor::Green,
-		TEXT("Lograste escapar.")
-	);
+	AFPIpvmultiGameState* GS =
+		GetWorld()->GetGameState<AFPIpvmultiGameState>();
+
+	if (GS)
+	{
+		GS->OnGameFinished.AddUObject(
+			this,
+			&AFPIpvmultiPlayerController::HandleGameFinished
+		);
+	}
 }
 
-void AFPIpvmultiPlayerController::Client_ShowLoseMessage_Implementation()
+void AFPIpvmultiPlayerController::HandleGameFinished()
 {
 	if (!IsLocalController()) return;
 
-	GEngine->AddOnScreenDebugMessage(
-		-1, 5.f, FColor::Red,
-		TEXT("No has escapado.")
-	);
+	UUserWidget* WinWidget =
+		CreateWidget(this, WinWidgetClass);
+
+	if (WinWidget)
+	{
+		WinWidget->AddToViewport();
+	}
 }

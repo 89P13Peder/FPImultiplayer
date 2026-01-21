@@ -16,10 +16,11 @@ class AFPIpvmultiGameMode : public AGameModeBase
 public:
 	AFPIpvmultiGameMode();
 	
-	void PlayerWon(AFPIpvmultiCharacter* Winner);
+	void PlayerEnteredWinZone(ACharacter* Player);
 	
-private:
-	bool bGameEnded = false;
+protected:
+	UPROPERTY()
+	TSet<ACharacter*> PlayersThatArrived;
 };
 
 

@@ -3,7 +3,8 @@
 #include "FPIpvmultiGameMode.h"
 #include "FPIpvmultiCharacter.h"
 #include "UObject/ConstructorHelpers.h"
-#include "FPIpvmultiPlayerController.h"
+#include "FPIpvmultiGameState.h"
+#include "GameFramework/GameStateBase.h"
 
 AFPIpvmultiGameMode::AFPIpvmultiGameMode()
 	: Super()
@@ -14,26 +15,27 @@ AFPIpvmultiGameMode::AFPIpvmultiGameMode()
 
 }
 
-void AFPIpvmultiGameMode::PlayerWon(AFPIpvmultiCharacter* Winner)
+void AFPIpvmultiGameMode::PlayerEnteredWinZone(ACharacter* Player)
 {
-	if (bGameEnded || !Winner) return;
-	bGameEnded = true;
+	if (!HasAuthority() || !Player) return;
 
-	for (FConstPlayerControllerIterator It = GetWorld()->GetPlayerControllerIterator(); It; ++It)
+	if (PlayersThatArrived.Contains(Player))
+		return;
+
+	PlayersThatArrived.Add(Player);
+
+	AFPIpvmultiGameState* GS =
+		GetGameState<AFPIpvmultiGameState>();
+
+	if (!GS) return;
+
+	GS->PlayersInWinZone = PlayersThatArrived.Num();
+
+	int32 TotalPlayers = GameState->PlayerArray.Num();
+
+	if (GS->PlayersInWinZone >= TotalPlayers)
 	{
-		APlayerController* PC = It->Get();
-		AFPIpvmultiPlayerController* MyPC =
-			Cast<AFPIpvmultiPlayerController>(PC);
-
-		if (!MyPC) continue;
-
-		if (PC == Winner->GetController())
-		{
-			MyPC->Client_ShowWinMessage();
-		}
-		else
-		{
-			MyPC->Client_ShowLoseMessage();
-		}
+		GS->SetGameFinished();
 	}
 }
+

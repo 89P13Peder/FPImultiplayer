@@ -15,9 +15,10 @@ class FPIPVMULTI_API AFPIpvmultiPlayerController : public APlayerController
 	GENERATED_BODY()
 	
 public: 
-	UFUNCTION(Client, Reliable)
-	void Client_ShowWinMessage();
+	virtual void BeginPlay() override;
 	
-	UFUNCTION(Client, Reliable)
-	void Client_ShowLoseMessage();
+	void HandleGameFinished();
+	
+	UPROPERTY(EditAnywhere, Category = "UI")
+	TSubclassOf<UUserWidget> WinWidgetClass;
 };
