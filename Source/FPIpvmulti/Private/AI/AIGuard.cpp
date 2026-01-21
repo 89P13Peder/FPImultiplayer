@@ -2,7 +2,7 @@
 
 
 #include "FPIpvmulti/Public/AI/AIGuard.h"
-
+#include "FPIpvmulti/FPIpvmultiCharacter.h"
 #include "Net/UnrealNetwork.h"
 #include "Perception/PawnSensingComponent.h"
 
@@ -54,21 +54,61 @@ void AAIGuard::OnPawnSeen(APawn* SeenPawn)
 {
 	if (SeenPawn == nullptr) return;
 	
-	DrawDebugSphere(GetWorld(), SeenPawn->GetActorLocation(), 35.0f,
-																	12.0f,
-																	FColor::Magenta,
-																	false,
-																	6.0f);
+	if (AFPIpvmultiCharacter* Player = Cast<AFPIpvmultiCharacter>(SeenPawn))
+	{
+		if (Player->bIsHiddenFromAI)
+		{
+			return; 
+		}
+	}
+	FString PawnName = SeenPawn->GetName();
+	
+	if (GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(
+			-1,                
+			4.0f,               
+			FColor::Red,        
+			FString::Printf(
+				TEXT("EL GUARDIA VIO A: %s"),
+				*PawnName
+			)
+		);
+	}
+	DrawDebugSphere(
+		GetWorld(),
+		SeenPawn->GetActorLocation(),
+		35.0f,
+		12.0f,
+		FColor::Magenta,
+		false,
+		6.0f);
 	
 	SetGuardState(EIAState::Alarted);
 }
 
 void AAIGuard::OnNoiseHeard(APawn* HearInstigator, const FVector& Location, float Volume)
 {
+	if (HearInstigator)
+	{
+		if (AFPIpvmultiCharacter* Player = Cast<AFPIpvmultiCharacter>(HearInstigator))
+		{
+			if (Player->bIsHiddenFromAI)
+			{
+				return; 
+			}
+		}
+	}
 	//if (HearInstigator == nullptr) return;
-	DrawDebugSphere(GetWorld(), Location, 30.0f,
-		12.0f, FColor::Magenta, false, 6.0f);
-
+	DrawDebugSphere(
+		GetWorld(),
+		Location,
+		30.0f,
+		12.0f,
+		FColor::Blue,
+		false,
+		6.0f);
+										
 	FVector Direction = Location - GetActorLocation();
 	Direction.Normalize();
 	FRotator NewLookAt = FRotationMatrix::MakeFromX(Direction).Rotator();

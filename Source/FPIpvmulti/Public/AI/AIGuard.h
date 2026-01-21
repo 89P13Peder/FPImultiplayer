@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "AIGuard.generated.h"
+
 class UPawnSensingComponent;
 
 UENUM(BlueprintType)

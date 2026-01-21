@@ -10,6 +10,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 #include "Components/PawnNoiseEmitterComponent.h"
+#include "Net/UnrealNetwork.h"
 #include "Engine/LocalPlayer.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
@@ -42,6 +43,13 @@ AFPIpvmultiCharacter::AFPIpvmultiCharacter()
 
 
 //////////////////////////////////////////////////////////////////////////// Input
+
+void AFPIpvmultiCharacter::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	
+	DOREPLIFETIME(AFPIpvmultiCharacter, bIsHiddenFromAI);
+}
 
 void AFPIpvmultiCharacter::NotifyControllerChanged()
 {

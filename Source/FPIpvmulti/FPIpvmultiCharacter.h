@@ -58,6 +58,8 @@ public:
 	AFPIpvmultiCharacter();
 
 	void HandleFireInput();
+	
+	void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
 
 protected:
 	/** Called for movement input */
@@ -82,11 +84,13 @@ public:
 
 	UFUNCTION(Server, Reliable)
 	void Server_Fire();
-
+	
+	UPROPERTY(Replicated)
+	bool bIsHiddenFromAI = false;
 protected:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category= "AI")
 	UPawnNoiseEmitterComponent* PawnNoiseEmitterComp;
-
+	
 };
 
