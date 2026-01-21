@@ -87,6 +87,9 @@ public:
 	
 	UPROPERTY(Replicated)
 	bool bIsHiddenFromAI = false;
+	
+	UFUNCTION(Client, Reliable)
+	void Client_ShowWinMessage();
 protected:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category= "AI")

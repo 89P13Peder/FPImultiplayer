@@ -6,6 +6,8 @@
 #include "GameFramework/GameModeBase.h"
 #include "FPIpvmultiGameMode.generated.h"
 
+class AFPIpvmultiCharacter;
+
 UCLASS(minimalapi)
 class AFPIpvmultiGameMode : public AGameModeBase
 {
@@ -13,6 +15,11 @@ class AFPIpvmultiGameMode : public AGameModeBase
 
 public:
 	AFPIpvmultiGameMode();
+	
+	void PlayerWon(AFPIpvmultiCharacter* Winner);
+	
+private:
+	bool bGameEnded = false;
 };
 
 

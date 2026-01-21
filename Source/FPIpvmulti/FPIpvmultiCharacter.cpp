@@ -89,6 +89,21 @@ void AFPIpvmultiCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	}
 }
 
+void AFPIpvmultiCharacter::Client_ShowWinMessage_Implementation()
+{
+	if (HasAuthority())
+	{
+		return;
+	}
+
+	GEngine->AddOnScreenDebugMessage(
+		-1,
+		5.f,
+		FColor::Green,
+		TEXT("GANASTE")
+	);
+}
+
 
 void AFPIpvmultiCharacter::Move(const FInputActionValue& Value)
 {
