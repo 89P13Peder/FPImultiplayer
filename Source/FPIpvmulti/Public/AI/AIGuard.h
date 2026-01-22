@@ -71,4 +71,7 @@ protected:
 	UFUNCTION(BlueprintImplementableEvent, Category = "IA Guard")
 	void OnStateChanged(EIAState NewState);
 	
+protected:
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+	
 };

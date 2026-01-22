@@ -149,11 +149,24 @@ void AAIGuard::SetGuardState(EIAState NewState)
 	OnStateChanged(GuardState);
 }
 
+
 void AAIGuard::OnRep_GuardState()
 {
 	OnStateChanged(GuardState);
 }
 
 
+void AAIGuard::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+	
+	if (PawnSensingComp)
+	{
+		PawnSensingComp->OnSeePawn.RemoveAll(this);
+		PawnSensingComp->OnHearNoise.RemoveAll(this);
+	}
+
+	GetWorldTimerManager().ClearAllTimersForObject(this);
+}
 
 

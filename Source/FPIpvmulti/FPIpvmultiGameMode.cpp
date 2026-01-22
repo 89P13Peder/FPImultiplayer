@@ -58,7 +58,7 @@ void AFPIpvmultiGameMode::RegisterPlayerDetected()
 
 	if (GS->TimesDetected >= 5)
 	{
-		GS->SetGameLost();
+		//GS->SetGameLost();
 	}
 	
 }
