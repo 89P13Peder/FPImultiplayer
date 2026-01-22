@@ -19,6 +19,9 @@ void AFPIpvmultiPlayerController::BeginPlay()
 			this,
 			&AFPIpvmultiPlayerController::HandleGameFinished
 		);
+		GS->OnGameLost.AddUObject(
+			this,
+			&AFPIpvmultiPlayerController::HandleLostGame);
 	}
 }
 
@@ -33,4 +36,45 @@ void AFPIpvmultiPlayerController::HandleGameFinished()
 	{
 		WinWidget->AddToViewport();
 	}
+}
+
+void AFPIpvmultiPlayerController::HandleLostGame()
+{
+	if (!IsLocalController()) return;
+
+	UUserWidget* LoseWidget =
+		CreateWidget(this, LoseWidgetClass);
+
+	if (LoseWidget)
+	{
+		LoseWidget->AddToViewport();
+	}
+	
+	PauseAndEndGame(2.f);
+}
+
+void AFPIpvmultiPlayerController::PauseAndEndGame(float Delay)
+{
+	if (!IsLocalController())
+		return;
+
+	SetIgnoreMoveInput(true);
+	SetIgnoreLookInput(true);
+
+	bShowMouseCursor = true;
+
+	GetWorldTimerManager().SetTimer(
+		TimerHandle_EndGame,
+		this,
+		&AFPIpvmultiPlayerController::EndGame,
+		Delay,
+		false
+	);
+}
+
+void AFPIpvmultiPlayerController::EndGame()
+{
+	if (!IsLocalController())
+		return;
+	ConsoleCommand(TEXT("quit"));
 }

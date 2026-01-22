@@ -3,6 +3,7 @@
 
 #include "FPIpvmulti/Public/AI/AIGuard.h"
 #include "FPIpvmulti/FPIpvmultiCharacter.h"
+#include "FPIpvmulti/FPIpvmultiGameMode.h"
 #include "Net/UnrealNetwork.h"
 #include "Perception/PawnSensingComponent.h"
 
@@ -84,6 +85,17 @@ void AAIGuard::OnPawnSeen(APawn* SeenPawn)
 		6.0f);
 	
 	SetGuardState(EIAState::Alarted);
+	
+	if (HasAuthority())
+	{
+		AFPIpvmultiGameMode* GM =
+			GetWorld()->GetAuthGameMode<AFPIpvmultiGameMode>();
+
+		if (GM)
+		{
+			GM->RegisterPlayerDetected();
+		}
+	}
 }
 
 void AAIGuard::OnNoiseHeard(APawn* HearInstigator, const FVector& Location, float Volume)

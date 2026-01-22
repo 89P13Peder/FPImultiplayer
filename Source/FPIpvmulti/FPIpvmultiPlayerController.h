@@ -19,6 +19,18 @@ public:
 	
 	void HandleGameFinished();
 	
+	void HandleLostGame();
+	
 	UPROPERTY(EditAnywhere, Category = "UI")
 	TSubclassOf<UUserWidget> WinWidgetClass;
+	
+	UPROPERTY(EditAnywhere, Category = "UI")
+	TSubclassOf<UUserWidget> LoseWidgetClass;
+	
+protected:
+	FTimerHandle TimerHandle_EndGame;
+
+	void PauseAndEndGame(float Delay);
+	void EndGame();
+
 };

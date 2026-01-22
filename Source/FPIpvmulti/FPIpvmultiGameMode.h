@@ -18,6 +18,8 @@ public:
 	
 	void PlayerEnteredWinZone(ACharacter* Player);
 	
+	void RegisterPlayerDetected();
+	
 protected:
 	UPROPERTY()
 	TSet<ACharacter*> PlayersThatArrived;

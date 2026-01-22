@@ -5,6 +5,27 @@
 #include "Net/UnrealNetwork.h"
 #include "Engine/Engine.h"
 
+void AFPIpvmultiGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	
+	DOREPLIFETIME(AFPIpvmultiGameState, bGameFinished);
+	DOREPLIFETIME(AFPIpvmultiGameState, PlayersInWinZone);
+	
+	DOREPLIFETIME(AFPIpvmultiGameState, bGameLost);
+	DOREPLIFETIME(AFPIpvmultiGameState, TimesDetected);
+}
+
+void AFPIpvmultiGameState::SetGameLost()
+{
+	if (bGameLost)
+		return;
+
+	bGameLost = true;
+
+	OnGameLost.Broadcast();
+}
+
 void AFPIpvmultiGameState::OnRep_GameFinished()
 {
 	GEngine->AddOnScreenDebugMessage(
@@ -17,13 +38,12 @@ void AFPIpvmultiGameState::OnRep_GameFinished()
 	OnGameFinished.Broadcast();
 }
 
-void AFPIpvmultiGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+void AFPIpvmultiGameState::OnRep_GameLost()
 {
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	
-	DOREPLIFETIME(AFPIpvmultiGameState, bGameFinished);
-	DOREPLIFETIME(AFPIpvmultiGameState, PlayersInWinZone);
+	OnGameLost.Broadcast();
 }
+
 
 void AFPIpvmultiGameState::SetGameFinished()
 {
@@ -33,6 +53,21 @@ void AFPIpvmultiGameState::SetGameFinished()
 	bGameFinished = true;
 
 	OnGameFinished.Broadcast();
+}
+
+void AFPIpvmultiGameState::OnRep_TimesDetected()
+{
+	if (!GEngine) return;
+
+	GEngine->AddOnScreenDebugMessage(
+		1,                     
+		2.0f,                  
+		FColor::Orange,
+		FString::Printf(
+			TEXT("Jugadores detectados: %d / 5"),
+			TimesDetected
+		)
+	);
 }
 
 
