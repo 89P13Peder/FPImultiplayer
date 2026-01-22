@@ -20,6 +20,8 @@ public:
 	
 	void RegisterPlayerDetected();
 	
+	void ResetTimesDetected();
+	
 protected:
 	UPROPERTY()
 	TSet<ACharacter*> PlayersThatArrived;

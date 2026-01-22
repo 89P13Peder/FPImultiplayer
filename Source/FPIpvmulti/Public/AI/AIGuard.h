@@ -45,6 +45,8 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UPawnSensingComponent* PawnSensingComp;
 
+	void ResetDetection();
+	void AccumulateDetection();
 	UFUNCTION()
 	void OnPawnSeen(APawn* Pawn);
 
@@ -73,5 +75,14 @@ protected:
 	
 protected:
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+	
+protected:
+	
+	FTimerHandle TimerHandle_Detection;
+
+	UPROPERTY()
+	APawn* SeenPawnDetected = nullptr;
+
+	int32 DetectionPoints = 0;
 	
 };

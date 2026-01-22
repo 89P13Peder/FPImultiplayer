@@ -51,15 +51,23 @@ void AFPIpvmultiGameMode::RegisterPlayerDetected()
 
 	GS->TimesDetected++;
 
-	UE_LOG(LogTemp, Warning,
-		TEXT("Jugador detectado. Total: %d"),
-		GS->TimesDetected
-	);
-
 	if (GS->TimesDetected >= 5)
 	{
-		//GS->SetGameLost();
+		GS->SetGameLost();
 	}
 	
+}
+
+void AFPIpvmultiGameMode::ResetTimesDetected()
+{
+	if (!HasAuthority()) return;
+
+	AFPIpvmultiGameState* GS =
+		GetGameState<AFPIpvmultiGameState>();
+
+	if (!GS || GS->bGameLost)
+		return;
+
+	GS->TimesDetected = 0;
 }
 
