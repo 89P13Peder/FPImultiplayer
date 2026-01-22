@@ -4,7 +4,6 @@
 #include "AWinTrigger.h"
 #include "Components/BoxComponent.h"
 #include "FPIpvmultiCharacter.h"
-#include "FPIpvmultiCharacter.h"
 #include "FPIpvmultiGameMode.h"
 
 // Sets default values
